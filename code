@@ -1,0 +1,44 @@
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.*;
+class Main{
+    public static void main(String[] args){
+        String user="root";
+        String password="Sharma@527292";
+        String url="jdbc:mysql://localhost:3306/mydata";
+        String quary="INSERT INTO image_data(data) VALUES(?) ";
+
+         String path="C:\\Users\\rebel\\OneDrive\\Pictures\\Screenshots\\Screenshot 2026-05-07 120108.png";
+        try{
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.print("driver load succesfuly");
+            Connection cs= DriverManager.getConnection(url,user,password);
+           FileInputStream fs=new FileInputStream(path);
+           byte[] image_val=new byte[fs.available()];
+           fs.read(image_val);
+           PreparedStatement ps= cs.prepareStatement(quary);
+           ps.setBytes(1,image_val);
+           int ans=ps.executeUpdate();
+           if(ans>0){
+               System.out.println("update succesfully");
+           }
+           else
+               System.out.println("update not succesfully");
+
+        }
+        catch(FileNotFoundException e){
+            System.out.print(e.getMessage());
+        }
+        catch(SQLException e){
+            System.out.print(e.getMessage());
+        }
+      catch(ClassNotFoundException e){
+          System.out.print(e.getMessage());
+      }
+        catch(IOException e){
+            System.out.print(e.getMessage());
+        }
+    }
+}
